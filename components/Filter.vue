@@ -6,12 +6,13 @@
         <ul>
           <li v-for="(option, index) in filter.options" :key="index">
             <v-checkbox
+              v-model="checkbox"
               :label="option.display_name"
               color="primary"
+              :value="option.key"
               hide-details
             >
             </v-checkbox>
-            <!-- {{ option.display_name }} -->
           </li>
         </ul>
       </template>
@@ -21,14 +22,9 @@
             v-for="(option, index) in filter.options"
             :key="index"
             :label="option.display_name"
-            :value="option.display_name"
+            :value="option.key"
           ></v-radio>
         </v-radio-group>
-        <!-- <ul>
-          <li v-for="(option, index) in filter.options" :key="index">
-            - {{ option.display_name }}
-          </li>
-        </ul> -->
       </template>
     </div>
   </div>
@@ -48,4 +44,7 @@ const props = defineProps({
     required: true
   }
 })
+const checkbox = ref([] as string[])
+const radioGroup = ref('')
+// TODO: emit filter change event
 </script>
