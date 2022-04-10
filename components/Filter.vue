@@ -11,6 +11,7 @@
               color="primary"
               :value="option.key"
               hide-details
+              @change="filterChange"
             >
             </v-checkbox>
           </li>
@@ -23,6 +24,7 @@
             :key="index"
             :label="option.display_name"
             :value="option.key"
+            @change="filterChange"
           ></v-radio>
         </v-radio-group>
       </template>
@@ -38,6 +40,7 @@ export default {
 </script>
 
 <script setup lang="ts">
+const emit = defineEmits(['filterChange'])
 const props = defineProps({
   filter: {
     type: Object,
@@ -46,5 +49,34 @@ const props = defineProps({
 })
 const checkbox = ref([] as string[])
 const radioGroup = ref('')
-// TODO: emit filter change event
+
+const filterChange = () => {
+  const filter = {
+    key: props.filter.field_name,
+    value:
+      props.filter.selection_type === 'MULTIPLE'
+        ? checkbox.value
+        : radioGroup.value,
+    isSelected:
+      props.filter.selection_type === 'MULTIPLE' ? checkbox.value.length : true
+  }
+  emit('filterChange', filter)
+  // TODO: handle query string updates
+}
+
+const setSelections = () => {
+  // NOTE: checkboxes uses an array for values, radios uses a string
+  if (props.filter.selection_type === 'MULTIPLE') {
+    checkbox.value = props.filter.options
+      .filter((option) => option.is_selected)
+      .map((option) => option.key)
+  } else {
+    radioGroup.value =
+      props.filter.options
+        .filter((option) => option.is_selected)
+        .map((option) => option.key)[0] || ''
+  }
+}
+
+setSelections()
 </script>

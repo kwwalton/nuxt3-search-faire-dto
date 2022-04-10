@@ -5,7 +5,7 @@
         v-model="searchTerm"
         label="search this website"
         append-icon="search"
-        @keyup.enter="search()"
+        @keyup.enter="search"
       />
     </v-form>
   </div>
